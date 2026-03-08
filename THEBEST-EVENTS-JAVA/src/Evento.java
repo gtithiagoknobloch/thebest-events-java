@@ -1,51 +1,57 @@
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.format.DateTimeFormatter;
 
 public class Evento {
     private String nome;
     private String endereco;
     private Categoria categoria;
-    private LocalDateTime horario;
+    private LocalDateTime inicio;
+    private LocalDateTime fim;
     private String descricao;
-    private List<Usuario> participantes = new ArrayList<>();
 
+    // 🔹 Construtor com início e fim
     public Evento(String nome, String endereco, Categoria categoria,
-                  LocalDateTime horario, String descricao) {
+                  LocalDateTime inicio, LocalDateTime fim, String descricao) {
         this.nome = nome;
         this.endereco = endereco;
         this.categoria = categoria;
-        this.horario = horario;
+        this.inicio = inicio;
+        this.fim = fim;
         this.descricao = descricao;
     }
 
-    // Métodos de participação
-    public void adicionarParticipante(Usuario u) {
-        participantes.add(u);
-    }
-
-    public void removerParticipante(Usuario u) {
-        participantes.remove(u);
-    }
-
-    // Métodos de verificação de horário
-    public boolean estaOcorrendoAgora() {
-        LocalDateTime agora = LocalDateTime.now();
-        return horario.isEqual(agora) || (horario.isBefore(agora) && horario.plusHours(2).isAfter(agora));
-    }
-
-    public boolean jaOcorreu() {
-        LocalDateTime agora = LocalDateTime.now();
-        return horario.isBefore(agora);
-    }
-
-    // Getters
+    // 🔹 Getters
     public String getNome() { return nome; }
     public String getEndereco() { return endereco; }
     public Categoria getCategoria() { return categoria; }
-    public LocalDateTime getHorario() { return horario; }
+    public LocalDateTime getInicio() { return inicio; }
+    public LocalDateTime getFim() { return fim; }
     public String getDescricao() { return descricao; }
-    public List<Usuario> getParticipantes() { return participantes; }
-    
+
+    // 🔹 Método para verificar se está acontecendo agora
+    public boolean estaAcontecendoAgora() {
+        LocalDateTime agora = LocalDateTime.now();
+        return !agora.isBefore(inicio) && !agora.isAfter(fim);
+    }
+
+    // 🔹 Representação textual do evento
+    @Override
+public String toString() {
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+    return String.format(
+        "Evento: %s\n" +
+        "Endereço: %s\n" +
+        "Categoria: %s\n" +
+        "Início: %s\n" +
+        "Fim: %s\n" +
+        "Descrição: %s\n",
+        nome,
+        endereco,
+        categoria,
+        inicio.format(formatter),
+        fim.format(formatter),
+        descricao
+    );
+}
 
 }

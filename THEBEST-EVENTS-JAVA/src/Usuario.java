@@ -6,54 +6,52 @@ public class Usuario {
     private String email;
     private String cidade;
     private int idade;
-    private List<Evento> eventosConfirmados = new ArrayList<>();
+    private List<Evento> eventosConfirmados;
 
-    // Construtor
+    // 🔹 Construtor
     public Usuario(String nome, String email, String cidade, int idade) {
         this.nome = nome;
         this.email = email;
         this.cidade = cidade;
         this.idade = idade;
+        this.eventosConfirmados = new ArrayList<>();
     }
 
-    // Métodos de participação
-    public void participarEvento(Evento e) {
-        if (!eventosConfirmados.contains(e)) {
-            eventosConfirmados.add(e);
-            e.adicionarParticipante(this);
+    // 🔹 Getters
+    public String getNome() { return nome; }
+    public String getEmail() { return email; }
+    public String getCidade() { return cidade; }
+    public int getIdade() { return idade; }
+
+    // 🔹 Participar de evento
+    public void participarEvento(Evento evento) {
+        if (!eventosConfirmados.contains(evento)) {
+            eventosConfirmados.add(evento);
         }
     }
 
-    public void cancelarParticipacao(Evento e) {
-        if (eventosConfirmados.contains(e)) {
-            eventosConfirmados.remove(e);
-            e.removerParticipante(this);
-        }
+    // 🔹 Cancelar participação
+    public void cancelarParticipacao(Evento evento) {
+        eventosConfirmados.remove(evento);
     }
 
-    // Listar eventos confirmados
+    // 🔹 Listar eventos confirmados
     public void listarEventosConfirmados() {
         if (eventosConfirmados.isEmpty()) {
             System.out.println("Nenhum evento confirmado.");
             return;
         }
-        System.out.println("\n==== EVENTOS CONFIRMADOS ====");
+        System.out.println("=== Eventos confirmados por " + nome + " ===");
         for (int i = 0; i < eventosConfirmados.size(); i++) {
-            Evento e = eventosConfirmados.get(i);
-            System.out.printf("%d - %s (%s)\n", i, e.getNome(), e.getHorario());
+            System.out.println("[" + i + "] " + eventosConfirmados.get(i).getNome());
         }
     }
 
+    // 🔹 Obter evento confirmado pelo índice
     public Evento getEventoConfirmado(int indice) {
         if (indice >= 0 && indice < eventosConfirmados.size()) {
             return eventosConfirmados.get(indice);
         }
         return null;
     }
-
-    // Getters
-    public String getNome() { return nome; }
-    public String getEmail() { return email; }
-    public String getCidade() { return cidade; }
-    public int getIdade() { return idade; }
 }

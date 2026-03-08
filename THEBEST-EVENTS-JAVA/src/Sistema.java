@@ -17,7 +17,17 @@ public class Sistema {
 
     public static void main(String[] args) {
         gerenciador.carregarEventos(); // carrega eventos do arquivo
+
+        // 🔹 Mostra eventos ocorrendo agora logo na inicialização
+        System.out.println(BLUE + "=== Eventos acontecendo neste momento ===" + RESET);
+        gerenciador.eventosOcorrendoAgora();
+
+        System.out.println("\nPressione ENTER para ir ao menu principal...");
+        scanner.nextLine(); // pausa até o usuário apertar ENTER
+
+        // 🔹 Só depois abre o menu principal
         menuPrincipal();
+
         gerenciador.salvarEventos();   // salva ao sair
     }
 
@@ -124,7 +134,7 @@ public class Sistema {
     }
 
     private static void menuPrincipal() {
-        int opcao;
+    int opcao = -1;
         do {
             limparTela(); // limpa a tela antes de mostrar o menu
             System.out.println(BLUE + "\n==== MENU PRINCIPAL ====" + RESET);
@@ -137,14 +147,20 @@ public class Sistema {
             System.out.println(YELLOW + "7 - Eventos Ocorrendo Agora" + RESET);
             System.out.println(YELLOW + "8 - Eventos Passados" + RESET);
             System.out.println(RED + "0 - Sair" + RESET);
-            System.out.print("Escolha uma opção: ");
-            opcao = scanner.nextInt();
-            scanner.nextLine(); // consumir quebra de linha
+            System.out.print("Escolha uma opção (apenas números): ");
+
+            String entrada = scanner.nextLine().trim();
+            try {
+                opcao = Integer.parseInt(entrada);
+            } catch (NumberFormatException e) {
+                System.out.println("Entrada inválida! Digite apenas números.");
+                opcao = -1; // força repetir o menu
+            }
 
             switch (opcao) {
                 case 1 -> cadastrarUsuario();
                 case 2 -> cadastrarEvento();
-                case 3 -> gerenciador.listarEventos();
+                case 3 -> gerenciador.listarEventosDetalhados(scanner);
                 case 4 -> participarEvento();
                 case 5 -> cancelarParticipacao();
                 case 6 -> {
@@ -154,7 +170,8 @@ public class Sistema {
                 case 7 -> gerenciador.eventosOcorrendoAgora();
                 case 8 -> gerenciador.eventosPassados();
                 case 0 -> System.out.println("Saindo... Até logo!");
-                default -> System.out.println("Opção inválida!");
+                case -1 -> {} // ignora erro e repete menu
+                default -> System.out.println("Opção inválida! Digite um número válido.");
             }
 
             System.out.println("\nPressione ENTER para continuar...");
@@ -210,22 +227,31 @@ public class Sistema {
         Categoria categoria = lerCategoriaObrigatoria();
         if (categoria == null) return;
 
-        LocalDateTime horario = lerDataHoraObrigatoria("Horário (dd/MM/yyyy HH:mm): ");
-        if (horario == null) return;
+        LocalDateTime inicio = lerDataHoraObrigatoria("Horário de início (dd/MM/yyyy HH:mm): ");
+        if (inicio == null) return;
+
+        LocalDateTime fim = lerDataHoraObrigatoria("Horário de término (dd/MM/yyyy HH:mm): ");
+        if (fim == null) return;
+
+        if (fim.isBefore(inicio)) {
+            System.out.println("O horário de término não pode ser antes do início!");
+            return;
+        }
 
         String descricao = lerCampoObrigatorio("Descrição: ");
         if (descricao.equals("-1")) return;
 
-        Evento evento = new Evento(nome, endereco, categoria, horario, descricao);
+        Evento evento = new Evento(nome, endereco, categoria, inicio, fim, descricao);
         gerenciador.cadastrarEvento(evento);
         System.out.println("Evento cadastrado com sucesso!");
-    }
+    } 
+
     private static void participarEvento() {
         if (usuario == null) {
             System.out.println("Cadastre um usuário primeiro!");
             return;
         }
-        gerenciador.listarEventos();
+        gerenciador.listarEventosDetalhados(scanner);
         System.out.println("Digite o índice do evento para participar ou -1 para voltar: ");
         int indice = scanner.nextInt();
         scanner.nextLine();
@@ -243,6 +269,7 @@ public class Sistema {
             System.out.println("Evento inválido.");
         }
     }
+
     private static void cancelarParticipacao() {
         if (usuario == null) {
             System.out.println("Cadastre um usuário primeiro!");
