@@ -63,6 +63,68 @@ O foco principal é aplicar conceitos como:
 
 ---
 
+## 📊 Diagrama de Classes
+
+```text
+                ┌───────────────────┐
+                │     Sistema       │
+                │-------------------│
+                │ - usuario         │
+                │ - gerenciador     │
+                │ - scanner         │
+                │ + menuPrincipal() │
+                │ + cadastrar...    │
+                │ + participar...   │
+                │ + cancelar...     │
+                └─────────┬─────────┘
+                          │ usa
+                          ▼
+                ┌───────────────────┐
+                │ GerenciadorEventos│
+                │-------------------│
+                │ - eventos[]       │
+                │ + cadastrarEvento │
+                │ + listarEventos   │
+                │ + eventosAgora    │
+                │ + eventosPassados │
+                └─────────┬─────────┘
+                          │ contém
+                          ▼
+                ┌───────────────────┐
+                │      Evento       │
+                │-------------------│
+                │ - nome            │
+                │ - endereco        │
+                │ - categoria       │
+                │ - inicio          │
+                │ - fim             │
+                │ - descricao       │
+                │ + estaAcontecendo │
+                └─────────┬─────────┘
+                          │ usa
+                          ▼
+                ┌───────────────────┐
+                │ Categoria (enum)  │
+                │-------------------│
+                │ FESTA, ESPORTE,   │
+                │ SHOW, CULTURAL,   │
+                │ OUTROS            │
+                └───────────────────┘
+
+                ┌───────────────────┐
+                │      Usuario      │
+                │-------------------│
+                │ - nome            │
+                │ - email           │
+                │ - cidade          │
+                │ - idade           │
+                │ - eventosConfirm. │
+                │ + participarEvento│
+                │ + cancelarPartic. │
+                │ + listarConfirm.  │
+                └───────────────────┘
+
+
 ## 📖 Conceitos Demonstrados
 - **Programação Orientada a Objetos (POO)**
 - **Encapsulamento**
