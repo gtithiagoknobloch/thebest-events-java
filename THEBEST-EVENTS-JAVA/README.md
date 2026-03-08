@@ -78,7 +78,7 @@ O foco principal é aplicar conceitos como:
 1. Compile o projeto:
    ```bash
    javac Sistema.java
-2. Na pasta bin execute:
+2. Dentro da pasta do projeto digite:
     ```bash
    java -cp bin Sistema
 
