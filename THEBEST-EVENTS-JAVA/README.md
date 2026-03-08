@@ -78,6 +78,9 @@ O foco principal é aplicar conceitos como:
 1. Compile o projeto:
    ```bash
    javac Sistema.java
+2. Na pasta bin execute:
+    ```bash
+   java -cp bin Sistema
 
 ## 🐧 Dados sobre os testes
 1. Compilado e testado no Linux Mint e com a versão do Java conforme a seguir!
