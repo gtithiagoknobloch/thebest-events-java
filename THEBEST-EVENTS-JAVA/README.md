@@ -123,7 +123,7 @@ O foco principal é aplicar conceitos como:
                 │ + cancelarPartic. │
                 │ + listarConfirm.  │
                 └───────────────────┘
-
+---
 
 ## 📖 Conceitos Demonstrados
 - **Programação Orientada a Objetos (POO)**
